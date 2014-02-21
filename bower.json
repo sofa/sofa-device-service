@@ -1,12 +1,15 @@
 {
   "name": "sofa-device-service",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "http://www.sofa.io",
   "authors": [
     "Pascal Precht <pascal@couchcommerce.com>"
   ],
   "description": "Sofa Web SDK device service component.",
   "main": "dist/sofa.deviceService.js",
+  "dependencies": {
+    "sofa-core": "~0.1.x"
+  },
   "keywords": [
     "sofa",
     "sofa.io",

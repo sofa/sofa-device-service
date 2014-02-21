@@ -1,6 +1,6 @@
 {
   "name": "sofa-device-service",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Sofa Web SDK device service component.",
   "main": "dist/sofa.deviceService.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "url": "https://github.com/sofa/sofa-device-service/issues"
   },
   "dependencies": {
-    "sofa-core": "~0.1.1"
+    "sofa-core": "~0.1.x"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
