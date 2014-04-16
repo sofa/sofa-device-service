@@ -1,3 +1,12 @@
+<a name="0.1.5"></a>
+### 0.1.5 (2014-04-16)
+
+
+#### Bug Fixes
+
+* **LICENSE:** fixes naming ([f65128f7](https://github.com/sofa/sofa-device-service/commit/f65128f7d162e34e564246b6be9a5c3739810049))
+
+
 <a name="0.1.3"></a>
 ### 0.1.3 (2014-03-11)
 
