@@ -258,6 +258,8 @@ sofa.define('sofa.DeviceService', function ($window) {
                     !versionStartsWith('3') &&
                     !versionStartsWith('4');
         }
+
+        return true;
     };
 
     /**
