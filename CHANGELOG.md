@@ -1,4 +1,13 @@
 <a name="0.1.5"></a>
+### 0.1.5 (2014-04-17)
+
+
+#### Features
+
+* **deviceService:** whitelist overflow:support ([772c2ea0](https://github.com/sofa/sofa-device-service/commit/772c2ea0b6b1eb186eb77b81617500a32c803a37))
+
+
+<a name="0.1.5"></a>
 ### 0.1.5 (2014-04-16)
 
 

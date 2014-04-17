@@ -1,5 +1,5 @@
 /**
- * sofa-device-service - v0.1.5 - 2014-04-16
+ * sofa-device-service - v0.1.5 - 2014-04-17
  * http://www.sofa.io
  *
  * Copyright (c) 2014 CouchCommerce GmbH (http://www.couchcommerce.com / http://www.sofa.io) and other contributors
@@ -268,6 +268,8 @@ sofa.define('sofa.DeviceService', function ($window) {
                     !versionStartsWith('3') &&
                     !versionStartsWith('4');
         }
+
+        return true;
     };
 
     /**
