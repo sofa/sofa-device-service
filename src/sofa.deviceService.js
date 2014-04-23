@@ -3,12 +3,15 @@
 /* global document */
 /* global sofa */
 /**
- * @name DeviceService
- * @namespace sofa.DeviceService
+ * @sofadoc class
+ * @name sofa.DeviceService
+ * @distFile dist/sofa.deviceService.js
+ * @package sofa-device-service
+ * @requiresPackage sofa-core
  *
  * @description
  * This is a helper service that gives you methods to check for certain contexts
- * on touch devices etc.. It determines the state for the usage of flexbox as well
+ * on touch devices etc. It determines the state for the usage of flexbox as well
  * as things like overflow:scroll support.
  */
 sofa.define('sofa.DeviceService', function ($window) {
@@ -26,8 +29,9 @@ sofa.define('sofa.DeviceService', function ($window) {
         IPAD_ON_IOS_7 = 'cc-ipad-ios-7';
 
     /**
-     * @method getHtmlTag
-     * @memberof cc.DeviceService
+     * @sofadoc method
+     * @name sofa.DeviceService#getHtmlTag
+     * @memberof sofa.DeviceService
      *
      * @description
      * Returns an HTMLDomObject for HTML.
@@ -65,8 +69,9 @@ sofa.define('sofa.DeviceService', function ($window) {
     isIpadOnIos7 = ua.match(/iPad/i) && userOSver.substr(0, 1) === '7';
 
     /**
-     * @method isIpadOnIos7
-     * @memberof cc.DeviceService
+     * @sofadoc method
+     * @name sofa.DeviceService#isIpadOnIos7
+     * @memberof sofa.DeviceService
      *
      * @description
      * Returns a boolean indicating whether the device is an iPad running iOS7 or not.
@@ -94,8 +99,9 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method getViewportDimensions
-     * @memberof cc.DeviceService
+     * @sofadoc method
+     * @name sofa.DeviceService#getViewportDimensions
+     * @memberof sofa.DeviceService
      *
      * @description
      * Returns the height of the viewport
@@ -107,8 +113,9 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method isInPortraitMode
-     * @memberof cc.DeviceService
+     * @sofadoc method
+     * @name sofa.DeviceService#isInPortraitMode
+     * @memberof sofa.DeviceService
      *
      * @description
      * Returns a bool indicating whether the decice is held in portrait mode.
@@ -120,8 +127,9 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method isLandscapeMode
-     * @memberof cc.DeviceService
+     * @sofadoc method
+     * @name sofa.DeviceService#isLandscapeMode
+     * @memberof sofa.DeviceService
      *
      * @description
      * Returns a bool indicating whether the decice is held in landscape mode.
@@ -133,7 +141,8 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method isTabletSiye
+     * @sofadoc method
+     * @name sofa.DeviceService#isTabletSiye
      * @memberof sofa.DeviceService
      *
      * @description
@@ -147,7 +156,8 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method isStockAndroidBrowser
+     * @sofadoc method
+     * @name sofa.DeviceService#isStockAndroidBrowser
      * @memberof sofa.DeviceService
      *
      * @description
@@ -160,7 +170,8 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method flagOs
+     * @sofadoc method
+     * @name sofa.DeviceService#flagOs
      * @memberof sofa.DeviceService
      *
      * @description
@@ -175,7 +186,8 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method flagOverflowSupport
+     * @sofadoc method
+     * @name sofa.DeviceService#flagOverflowSupport
      * @memberof sofa.DeviceService
      *
      * @description
@@ -188,7 +200,8 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
      /**
-      * @method getUserAgent
+      * @sofadoc method
+      * @name sofa.DeviceService#getUserAgent
       * @memberof sofa.DeviceService
       *
       * @description
@@ -202,7 +215,8 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method getOs
+     * @sofadoc method
+     * @name sofa.DeviceService#getOs
      * @memberof sofa.DeviceService
      *
      * @description
@@ -215,7 +229,8 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method getOsVersion
+     * @sofadoc method
+     * @name sofa.DeviceService#getOsVersion
      * @memberof sofa.DeviceService
      *
      * @description
@@ -228,7 +243,8 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method isAndroid2x
+     * @sofadoc method
+     * @name sofa.DeviceService#isAndroid2x
      * @memberof sofa.DeviceService
      *
      * @description
@@ -241,7 +257,8 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method hasOverflowSupport
+     * @sofadoc method
+     * @name sofa.DeviceService#hasOverflowSupport
      * @memberof sofa.DeviceService
      *
      * @description
@@ -263,7 +280,8 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method hasModernFlexboxSupport
+     * @sofadoc method
+     * @name sofa.DeviceService#hasModernFlexboxSupport
      * @memberof sofa.DeviceService
      *
      * @description
@@ -297,7 +315,8 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method flagModernFlexboxSupport
+     * @sofadoc method
+     * @name sofa.DeviceService#flagModernFlexboxSupport
      * @memberof sofa.DeviceService
      *
      * @description
@@ -313,8 +332,9 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method flagIpadOnIos7
-     * @memberof cc.DeviceService
+     * @sofadoc method
+     * @name sofa.DeviceService#flagIpadOnIos7
+     * @memberof sofa.DeviceService
      *
      * @description
      * Flags the document with an SDK specific class to help getting around a bug in iOS7 on iPad landscape mode.
@@ -328,8 +348,9 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method setViewportHeightToDeviceHeight
-     * @memberof cc.DeviceService
+     * @sofadoc method
+     * @name sofa.DeviceService#setViewportHeightToDeviceHeight
+     * @memberof sofa.DeviceService
      *
      * @description
      * Sets the height of the html element to the actual height of the device.
