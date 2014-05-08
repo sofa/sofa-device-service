@@ -133,7 +133,7 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method isTabletSiye
+     * @method isTabletSize
      * @memberof sofa.DeviceService
      *
      * @description
@@ -143,7 +143,7 @@ sofa.define('sofa.DeviceService', function ($window) {
      * @return {boolean} Whether the device is in tablet size or not.
      */
     self.isTabletSize = function () {
-        return $window.screen.width > 641;
+        return $window.innerWidth > 640;
     };
 
     /**
