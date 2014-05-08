@@ -1,3 +1,13 @@
+<a name="0.2.1"></a>
+### 0.2.1 (2014-05-08)
+
+
+#### Bug Fixes
+
+* **changelog:** fixes wrong version number from last generation ([94a4f61a](https://github.com/sofa/sofa-device-service/commit/94a4f61abb183192a8af285bd21a9dffb6047437))
+* **sofa-device-service:** to make android stock browser get correct value for tablet size ([7f787184](https://github.com/sofa/sofa-device-service/commit/7f7871844ebee0fbadcf850c294a7f2d31433b8a))
+
+
 <a name="0.2.0"></a>
 ### 0.2.0 (2014-04-17)
 

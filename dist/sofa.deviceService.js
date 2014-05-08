@@ -1,5 +1,5 @@
 /**
- * sofa-device-service - v0.1.5 - 2014-04-17
+ * sofa-device-service - v0.2.1 - 2014-05-08
  * http://www.sofa.io
  *
  * Copyright (c) 2014 CouchCommerce GmbH (http://www.couchcommerce.com / http://www.sofa.io) and other contributors
@@ -143,7 +143,7 @@ sofa.define('sofa.DeviceService', function ($window) {
     };
 
     /**
-     * @method isTabletSiye
+     * @method isTabletSize
      * @memberof sofa.DeviceService
      *
      * @description
@@ -153,7 +153,7 @@ sofa.define('sofa.DeviceService', function ($window) {
      * @return {boolean} Whether the device is in tablet size or not.
      */
     self.isTabletSize = function () {
-        return $window.screen.width > 641;
+        return $window.innerWidth > 640;
     };
 
     /**

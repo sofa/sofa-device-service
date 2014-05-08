@@ -1,6 +1,6 @@
 {
   "name": "sofa-device-service",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Sofa Web SDK device service component.",
   "main": "dist/sofa.deviceService.js",
   "homepage": "http://www.sofa.io",
