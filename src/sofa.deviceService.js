@@ -2,6 +2,7 @@
 /* global navigator */
 /* global document */
 /* global sofa */
+/* global CustomEvent */
 /**
  * @sofadoc class
  * @name sofa.DeviceService
@@ -39,27 +40,24 @@ sofa.define('sofa.DeviceService', function ($window) {
      * @return {object} HTMLDomObject
      */
     self.getHtmlTag = function () {
-        htmlTag = htmlTag || document.getElementsByTagName('html')[0];
-        return htmlTag;
+        return htmlTag || document.documentElement;
     };
 
     // determine OS
     if (ua.match(/iPad/i) || ua.match(/iPhone/i)) {
         userOS = 'iOS';
         uaindex = ua.indexOf('OS ');
-    }
-    else if (ua.match(/Android/i)) {
+    } else if (ua.match(/Android/i)) {
         userOS = 'Android';
         uaindex = ua.indexOf('Android ');
-    }
-    else {
+    } else {
         userOS = 'unknown';
     }
 
     // determine version
-    if (userOS === 'iOS'  &&  uaindex > -1) {
+    if (userOS === 'iOS' && uaindex > -1) {
         userOSver = ua.substr(uaindex + 3, 3).replace('_', '.');
-    } else if (userOS === 'Android'  &&  uaindex > -1) {
+    } else if (userOS === 'Android' && uaindex > -1) {
         userOSver = ua.substr(uaindex + 8, 3);
     } else {
         userOSver = 'unknown';
@@ -82,6 +80,11 @@ sofa.define('sofa.DeviceService', function ($window) {
         return isIpadOnIos7;
     };
 
+    if ($window.matchMedia) {
+        var mqTabletSize = $window.matchMedia('screen and (min-width: 641px)'),
+            mqPortrait   = $window.matchMedia('screen and (orientation: portrait)');
+    }
+
     var dimensions = {};
 
     var updateDimension = function () {
@@ -91,7 +94,21 @@ sofa.define('sofa.DeviceService', function ($window) {
 
     updateDimension();
 
-    $window.addEventListener('orientationchange', updateDimension, false);
+    var deviceServiceOrientationChange = new CustomEvent('deviceService.orientationchange');
+
+    (function () {
+        if ($window.matchMedia) {
+            mqPortrait.addListener(function handleOrientationChange() {
+                updateDimension();
+                $window.dispatchEvent(deviceServiceOrientationChange);
+            });
+        } else {
+            $window.addEventListener('orientationchange', function () {
+                updateDimension();
+                $window.dispatchEvent(deviceServiceOrientationChange);
+            }, false);
+        }
+    }());
 
     var versionStartsWith = function (str) {
         var version = self.getOsVersion();
@@ -118,12 +135,12 @@ sofa.define('sofa.DeviceService', function ($window) {
      * @memberof sofa.DeviceService
      *
      * @description
-     * Returns a bool indicating whether the decice is held in portrait mode.
+     * Returns a bool indicating whether the device is held in portrait mode.
      *
      * @return {bool} boolean
      */
     self.isInPortraitMode = function () {
-        return dimensions.height > dimensions.width;
+        return $window.matchMedia ? mqPortrait.matches : dimensions.height > dimensions.width;
     };
 
     /**
@@ -132,7 +149,7 @@ sofa.define('sofa.DeviceService', function ($window) {
      * @memberof sofa.DeviceService
      *
      * @description
-     * Returns a bool indicating whether the decice is held in landscape mode.
+     * Returns a bool indicating whether the device is held in landscape mode.
      *
      * @return {boolean}
      */
@@ -152,7 +169,7 @@ sofa.define('sofa.DeviceService', function ($window) {
      * @return {boolean} Whether the device is in tablet size or not.
      */
     self.isTabletSize = function () {
-        return $window.innerWidth > 640;
+        return $window.matchMedia ? mqTabletSize.matches : $window.innerWidth > 640;
     };
 
     /**
@@ -290,18 +307,24 @@ sofa.define('sofa.DeviceService', function ($window) {
      * @return {boolean}
      */
     self.hasModernFlexboxSupport = function () {
+        // IE 11+ safe by syntax
+        // FF 28+ filter by version!
+        // Chrome 21+ (-webkit) safe by syntax
+        // Safari 6.1+ (-webkit) safe by syntax
+        // iOS Safari 7+ (-webkit) safe by syntax
 
-        // Firefox currently has a flexbox bug
-        // See http://stackoverflow.com/a/17435156/956278
-        if (ua.match(/Firefox/i)) {
+        var getFirefoxVersion = function () {
+            var match = ua.match(/Firefox\/\d{2}/);
+            return match ? match[0].substr(8) * 1 : 0;
+        };
+
+        if (ua.match(/Firefox/i) && getFirefoxVersion() < 28) {
             return false;
         }
 
+        // Only new syntax
         var supportedValues = [
             '-webkit-flex',
-            '-moz-flex',
-            '-o-flex',
-            '-ms-flex',
             'flex'
         ];
 
