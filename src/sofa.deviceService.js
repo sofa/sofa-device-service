@@ -20,14 +20,148 @@ sofa.define('sofa.DeviceService', function ($window) {
 
     var ua = navigator.userAgent,
         htmlTag,
-        isIpadOnIos7,
-        uaindex,
+        dimensions = {},
         userOS,
-        userOSver;
+        userOSver,
+        mqTabletSize,
+        mqPortrait;
 
-    var MODERN_FLEXBOX_SUPPORT = 'cc-modern-flexbox',
-        NO_MODERN_FLEXBOX_SUPPORT = 'cc-no-modern-flexbox',
-        IPAD_ON_IOS_7 = 'cc-ipad-ios-7';
+    var MODERN_FLEXBOX_SUPPORT = 'modern-flexbox',
+        OVERFLOW_SUPPORT = 'overflow-support',
+        NO_PREFIX = 'no-',
+        ANDROID_2X = 'android-2',
+        IPAD_ON_IOS_7 = 'ipad-ios-7';
+
+    /**
+     * @param supports {boolean}
+     * @param className {string}
+     * @param negator {string}
+     *
+     * @description
+     * Adds a className to the HTML element which is indicating support or no-support for a tested feature
+     */
+    var flag = function (supports, className, negator) {
+        var htmlTag = self.getHtmlTag();
+        htmlTag.className += supports ? ' ' + className : ' ' + negator + className;
+    };
+
+    /**
+     * @param uaString {string}
+     *
+     * @description
+     * Returns the user's operating system as a string. Either "iOS", "Android" or "unknown".
+     *
+     * @returns {string}
+     */
+    var getOs = function (uaString) {
+        var os = 'unknown';
+
+        if (uaString.match(/iPad/i) || uaString.match(/iPhone/i)) {
+            os = 'iOS';
+        } else if (uaString.match(/Android/i)) {
+            os = 'Android';
+        }
+
+        return os;
+    };
+
+    /**
+     * @param uaString {string}
+     * @param operatingSystem {string}
+     *
+     * @description
+     * Returns the user's operating system version as a string. Only for iOS and Android, otherwise "unknown".
+     *
+     * @returns {string}
+     */
+    var getOsVersion = function (uaString, operatingSystem) {
+        var version = 'unknown';
+
+        if (operatingSystem === 'iOS' && uaString.match(/OS /)) {
+            version = uaString.substr(uaString.indexOf('OS ') + 3, 3).replace('_', '.');
+        } else if (operatingSystem === 'Android' && uaString.match(/Android /)) {
+            version = uaString.substr(uaString.indexOf('Android ') + 8, 3);
+        }
+
+        return version;
+    };
+
+    /**
+     * @description
+     * Updates the dimension object with current values of viewport width and height.
+     */
+    var updateDimension = function () {
+        dimensions.width = $window.innerWidth;
+        dimensions.height = $window.innerHeight;
+    };
+
+    /**
+     * @param str {string}
+     *
+     * @description
+     * Returns whether the current user's OS (major-) version equals the passed in value.
+     *
+     * @returns {boolean}
+     */
+    var versionStartsWith = function (str) {
+        var version = self.getOsVersion();
+        return version.indexOf(str) === 0;
+    };
+
+    /**
+     * @description
+     * Introduces a custom event for orientation change and adds listeners to matchMedia
+     * objects if matchMedia is available. Falls back to using standard orientationchange event.
+     */
+    var addOrientationChangeHandler = function () {
+        var deviceServiceOrientationChange = new CustomEvent('deviceService.orientationchange');
+
+        if ($window.matchMedia) {
+            mqTabletSize = $window.matchMedia('screen and (min-width: 641px)');
+            mqPortrait   = $window.matchMedia('screen and (orientation: portrait)');
+        }
+
+        if ($window.matchMedia) {
+            mqPortrait.addListener(function handleOrientationChange() {
+                updateDimension();
+                $window.dispatchEvent(deviceServiceOrientationChange);
+            });
+        } else {
+            $window.addEventListener('orientationchange', function () {
+                updateDimension();
+                $window.dispatchEvent(deviceServiceOrientationChange);
+            }, false);
+        }
+    };
+
+    /**
+     * @description
+     * Adds global "fix" for iOS' bug where changing device orientation while the keyboard is visible
+     * causes massive layout issues. Doesn't fix problems entirely, though.
+     */
+    var applyIosInputFocusFix = function () {
+        if (userOS === 'iOS') {
+            $window.addEventListener('resize', function () {
+                $window.setTimeout(function () {
+                    document.documentElement.style.minWidth = $window.innerWidth + 'px';
+                }, 0);
+            });
+        }
+    };
+
+    /**
+     * @description
+     * Initial setup for the deviceService.
+     * Sets OS variables and starts some functions that are needed to run upfront.
+     */
+    (function setupDeviceService() {
+        userOS = getOs(ua);
+        userOSver = getOsVersion(ua, userOS);
+
+        updateDimension();
+        addOrientationChangeHandler();
+        applyIosInputFocusFix();
+    }());
 
     /**
      * @sofadoc method
@@ -43,29 +177,6 @@ sofa.define('sofa.DeviceService', function ($window) {
         return htmlTag || document.documentElement;
     };
 
-    // determine OS
-    if (ua.match(/iPad/i) || ua.match(/iPhone/i)) {
-        userOS = 'iOS';
-        uaindex = ua.indexOf('OS ');
-    } else if (ua.match(/Android/i)) {
-        userOS = 'Android';
-        uaindex = ua.indexOf('Android ');
-    } else {
-        userOS = 'unknown';
-    }
-
-    // determine version
-    if (userOS === 'iOS' && uaindex > -1) {
-        userOSver = ua.substr(uaindex + 3, 3).replace('_', '.');
-    } else if (userOS === 'Android' && uaindex > -1) {
-        userOSver = ua.substr(uaindex + 8, 3);
-    } else {
-        userOSver = 'unknown';
-    }
-
-    // determine iPad + iOS7 (for landscape innerHeight bug, see flagIpadOnIos7() )
-    isIpadOnIos7 = ua.match(/iPad/i) && userOSver.substr(0, 1) === '7';
-
     /**
      * @sofadoc method
      * @name sofa.DeviceService#isIpadOnIos7
@@ -77,42 +188,7 @@ sofa.define('sofa.DeviceService', function ($window) {
      * @return {boolean}
      */
     self.isIpadOnIos7 = function () {
-        return isIpadOnIos7;
-    };
-
-    if ($window.matchMedia) {
-        var mqTabletSize = $window.matchMedia('screen and (min-width: 641px)'),
-            mqPortrait   = $window.matchMedia('screen and (orientation: portrait)');
-    }
-
-    var dimensions = {};
-
-    var updateDimension = function () {
-        dimensions.width = $window.innerWidth;
-        dimensions.height = $window.innerHeight;
-    };
-
-    updateDimension();
-
-    var deviceServiceOrientationChange = new CustomEvent('deviceService.orientationchange');
-
-    (function () {
-        if ($window.matchMedia) {
-            mqPortrait.addListener(function handleOrientationChange() {
-                updateDimension();
-                $window.dispatchEvent(deviceServiceOrientationChange);
-            });
-        } else {
-            $window.addEventListener('orientationchange', function () {
-                updateDimension();
-                $window.dispatchEvent(deviceServiceOrientationChange);
-            }, false);
-        }
-    }());
-
-    var versionStartsWith = function (str) {
-        var version = self.getOsVersion();
-        return version.indexOf(str) === 0;
+        return ua.match(/iPad/i) && versionStartsWith('7');
     };
 
     /**
@@ -121,9 +197,9 @@ sofa.define('sofa.DeviceService', function ($window) {
      * @memberof sofa.DeviceService
      *
      * @description
-     * Returns the height of the viewport
+     * Returns a dimension object holding the width and height of the viewport.
      *
-     * @return {int}
+     * @return {object}
      */
     self.getViewportDimensions = function () {
         return dimensions;
@@ -188,22 +264,6 @@ sofa.define('sofa.DeviceService', function ($window) {
 
     /**
      * @sofadoc method
-     * @name sofa.DeviceService#flagOs
-     * @memberof sofa.DeviceService
-     *
-     * @description
-     * Flags the current document with an SDK specific class depending on the OS
-     * of the device.
-     */
-    self.flagOs = function () {
-        var htmlTag = self.getHtmlTag();
-        var version = self.getOsVersion();
-        var majorVersion = version.length > 0 ? version[0] : '0';
-        htmlTag.className += ' cc-os-' + self.getOs().toLowerCase() + ' cc-osv-' + majorVersion;
-    };
-
-    /**
-     * @sofadoc method
      * @name sofa.DeviceService#flagOverflowSupport
      * @memberof sofa.DeviceService
      *
@@ -212,8 +272,7 @@ sofa.define('sofa.DeviceService', function ($window) {
      * overflow:scroll support.
      */
     self.flagOverflowSupport = function () {
-        var htmlTag = self.getHtmlTag();
-        htmlTag.className += self.hasOverflowSupport() ? ' cc-has-overflow-support' : ' cc-has-no-overflow-support';
+        flag(self.hasOverflowSupport(), OVERFLOW_SUPPORT, NO_PREFIX);
     };
 
      /**
@@ -346,12 +405,7 @@ sofa.define('sofa.DeviceService', function ($window) {
      * Flags the document with an SDK specific class for modern flexbox support.
      */
     self.flagModernFlexboxSupport = function () {
-        var htmlTag = self.getHtmlTag();
-        if (self.hasModernFlexboxSupport()) {
-            htmlTag.className += ' ' + MODERN_FLEXBOX_SUPPORT;
-        } else {
-            htmlTag.className += ' ' + NO_MODERN_FLEXBOX_SUPPORT;
-        }
+        flag(self.hasModernFlexboxSupport(), MODERN_FLEXBOX_SUPPORT, NO_PREFIX);
     };
 
     /**
@@ -364,9 +418,25 @@ sofa.define('sofa.DeviceService', function ($window) {
      * see http://stackoverflow.com/questions/18855642/ios-7-css-html-height-100-692px
      */
     self.flagIpadOnIos7 = function () {
-        if (isIpadOnIos7) {
+        if (self.isIpadOnIos7()) {
             var htmlTag = self.getHtmlTag();
             htmlTag.className += ' ' + IPAD_ON_IOS_7;
+        }
+    };
+
+    /**
+     * @sofadoc method
+     * @name sofa.DeviceService#flagAndroid2x
+     * @memberof sofa.DeviceService
+     *
+     * @description
+     * Flags the document with an SDK specific class, as the Android 2.x versions
+     * need some special CSS treatment.
+     */
+    self.flagAndroid2x = function () {
+        if (self.isAndroid2x()) {
+            var htmlTag = self.getHtmlTag();
+            htmlTag.className += ' ' + ANDROID_2X;
         }
     };
 

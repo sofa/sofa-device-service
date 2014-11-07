@@ -183,8 +183,8 @@ describe('sofa.DeviceService', function () {
         it('should flag html tag with OS information', function () {
             deviceService.flagOs();
             var classes = document.getElementsByTagName('html')[0].className;
-            expect(classes.indexOf('cc-os') > -1).toBe(true);
-            expect(classes.indexOf('cc-osv') > -1).toBe(true);
+            expect(classes.indexOf('os') > -1).toBe(true);
+            expect(classes.indexOf('osv') > -1).toBe(true);
         });
     });
 
@@ -198,8 +198,8 @@ describe('sofa.DeviceService', function () {
             deviceService.flagOverflowSupport();
             var classes = document.getElementsByTagName('html')[0].className;
             expect(
-                (classes.indexOf('cc-has-overflow-support') > -1) ||
-                (classes.indexOf('cc-has-no-overflow-support') > -1)
+                (classes.indexOf('overflow-support') > -1) ||
+                (classes.indexOf('no-overflow-support') > -1)
             ).toBe(true);
         });
     });
@@ -287,8 +287,8 @@ describe('sofa.DeviceService', function () {
             deviceService.flagModernFlexboxSupport();
             var classes = document.getElementsByTagName('html')[0].className;
             expect(
-                (classes.indexOf('cc-supports-modern-flexbox') > -1) ||
-                (classes.indexOf('cc-supports-modern-flexbox') === -1)
+                (classes.indexOf('modern-flexbox') > -1) ||
+                (classes.indexOf('no-modern-flexbox') > -1)
             ).toBe(true);
         });
     });
