@@ -35,10 +35,6 @@ describe('sofa.DeviceService', function () {
         expect(deviceService.isStockAndroidBrowser).toBeDefined();
     });
 
-    it('should have a method flagOs', function () {
-        expect(deviceService.flagOs).toBeDefined();
-    });
-
     it('should have a method flagOverflowSupport', function () {
         expect(deviceService.flagOverflowSupport).toBeDefined();
     });
@@ -171,20 +167,6 @@ describe('sofa.DeviceService', function () {
 
         it('should return a boolean', function () {
             expect(typeof deviceService.isStockAndroidBrowser()).toBe('boolean');
-        });
-    });
-
-    describe('sofa.DeviceService#flagOs', function () {
-
-        it('should be a function', function () {
-            expect(typeof deviceService.flagOs).toBe('function');
-        });
-
-        it('should flag html tag with OS information', function () {
-            deviceService.flagOs();
-            var classes = document.getElementsByTagName('html')[0].className;
-            expect(classes.indexOf('os') > -1).toBe(true);
-            expect(classes.indexOf('osv') > -1).toBe(true);
         });
     });
 
