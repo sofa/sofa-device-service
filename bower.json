@@ -6,7 +6,7 @@
         "Pascal Precht <pascal@couchcommerce.com>"
     ],
     "description": "Sofa Web SDK device service component.",
-    "main": "dist/sofa.deviceService.js",
+    "main": "dist/sofaDeviceService.js",
     "dependencies": {
         "sofa-core": "~0.1.x"
     },

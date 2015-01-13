@@ -1,12 +1,20 @@
 /**
- * sofa-device-service - v0.4.0 - 2014-08-05
+ * sofa-device-service - v0.4.0 - Tue Jan 13 2015 15:29:26 GMT+0100 (CET)
  * http://www.sofa.io
  *
  * Copyright (c) 2014 CouchCommerce GmbH (http://www.couchcommerce.com / http://www.sofa.io) and other contributors
- * THIS SOFTWARE CONTAINS COMPONENTS OF THE SOFA.IO COUCHCOMMERCE SDK (WWW.SOFA.IO).
+ * THIS SOFTWARE CONTAINS COMPONENTS OF THE SOFA.IO COUCHCOMMERCE SDK (WWW.SOFA.IO)
  * IT IS PROVIDED UNDER THE LICENSE TERMS OF THE ATTACHED LICENSE.TXT.
  */
 ;(function (sofa, document, undefined) {
+angular.module('sofa.deviceService', [])
+
+.factory('deviceService', ['$window', function ($window) {
+
+    'use strict';
+
+    return new sofa.DeviceService($window);
+}]);
 
 'use strict';
 /* global navigator */
@@ -371,5 +379,4 @@ sofa.define('sofa.DeviceService', function ($window) {
 
     return self;
 });
-
 }(sofa, document));
